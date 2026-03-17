@@ -104,12 +104,7 @@ export default function Hero() {
           </p>
 
           {/* Big name */}
-          <div
-            style={{
-              overflow: "hidden",
-              marginBottom: "0.2rem",
-            }}
-          >
+          <div style={{ overflow: "hidden", marginBottom: "0.2rem" }}>
             <h1
               className="word"
               style={{
@@ -258,53 +253,30 @@ export default function Hero() {
                 zIndex: 0,
               }}
             />
-            {/* Photo */}
+            {/* ✅ Foto profil dari Cloudinary */}
             <div
               style={{
                 position: "relative",
                 zIndex: 1,
                 width: "100%",
                 aspectRatio: "3/4",
-                background: "#111009",
-                border: "1px dashed rgba(201,168,76,0.25)",
                 borderRadius: "2px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.8rem",
                 overflow: "hidden",
               }}
             >
-              {/*
-                GANTI DENGAN: <img src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png" alt="Acep Nurjaman" style={{ width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0 }} />
-              */}
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="rgba(201,168,76,0.3)"
-                strokeWidth="0.8"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <circle cx="12" cy="10" r="3" />
-                <path d="M6 21v-1a6 6 0 0112 0v1" />
-              </svg>
-              <span
+              <img
+                src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png"
+                alt="Acep Nurjaman"
                 style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: "0.55rem",
-                  letterSpacing: "0.15em",
-                  color: "rgba(201,168,76,0.35)",
-                  textAlign: "center",
-                  padding: "0 1rem",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "top center",
+                  position: "absolute",
+                  inset: 0,
+                  display: "block",
                 }}
-              >
-                https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png
-                <br />
-                AS img src
-              </span>
+              />
             </div>
 
             {/* Badge */}
@@ -359,8 +331,7 @@ export default function Hero() {
           style={{
             width: "1px",
             height: "40px",
-            background:
-              "linear-gradient(to bottom, rgba(201,168,76,0.6), transparent)",
+            background: "linear-gradient(to bottom, rgba(201,168,76,0.6), transparent)",
             animation: "scrollPulse 2s ease infinite",
           }}
         />
