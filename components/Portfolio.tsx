@@ -7,42 +7,42 @@ const portfolioItems = [
     title: "Visual Identity & Branding",
     desc: "Logo, brand guide, dan seluruh elemen visual brand.",
     wide: true,
-    cloudinaryKey: "portfolio_brand",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_brand.jpg", // ← ganti URL ini
   },
   {
     tag: "Social Media",
     title: "Feed & Story Design",
     desc: "Desain konten sosial media yang konsisten.",
     wide: false,
-    cloudinaryKey: "portfolio_social",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_social.jpg", // ← ganti URL ini
   },
   {
     tag: "Logo Design",
     title: "Logo & Icon System",
     desc: "Logo yang memorable dan scalable.",
     wide: false,
-    cloudinaryKey: "portfolio_logo",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_logo.jpg", // ← ganti URL ini
   },
   {
     tag: "Print Design",
     title: "Poster & Banner",
     desc: "Material cetak berkualitas tinggi.",
     wide: false,
-    cloudinaryKey: "portfolio_print",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_print.jpg", // ← ganti URL ini
   },
   {
     tag: "Digital Marketing",
     title: "Al-Qudwah AQM",
     desc: "Sosial media & digital marketing AQM.",
     wide: true,
-    cloudinaryKey: "portfolio_aqm",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_aqm.jpg", // ← ganti URL ini
   },
   {
     tag: "AutoCAD",
     title: "Technical Drawing",
     desc: "Traffic Control Plan & Layout Jalan.",
     wide: false,
-    cloudinaryKey: "portfolio_cad",
+    imgUrl: "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/portfolio_cad.jpg", // ← ganti URL ini
   },
 ];
 
@@ -94,45 +94,20 @@ function PortCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Placeholder — swap with <img src="CLOUDINARY_URL" ...> */}
-      <div
+      {/* ✅ Foto dari Cloudinary — ganti URL di portfolioItems[n].imgUrl di atas */}
+      <img
+        src={item.imgUrl}
+        alt={item.title}
         style={{
           position: "absolute",
           inset: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "0.5rem",
-          background: "#111009",
-          border: "1px dashed rgba(201,168,76,0.15)",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
           transition: "transform 0.5s ease",
           transform: hovered ? "scale(1.04)" : "scale(1)",
         }}
-      >
-        <svg
-          width="36"
-          height="36"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="rgba(201,168,76,0.2)"
-          strokeWidth="0.7"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <path d="M3 9h18M9 21V9" />
-        </svg>
-        <span
-          style={{
-            fontFamily: "'Space Mono', monospace",
-            fontSize: "0.52rem",
-            letterSpacing: "0.12em",
-            color: "rgba(201,168,76,0.25)",
-            textAlign: "center",
-          }}
-        >
-          {item.cloudinaryKey}
-        </span>
-      </div>
+      />
 
       {/* Overlay */}
       <div
