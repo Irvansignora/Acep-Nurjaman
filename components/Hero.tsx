@@ -277,7 +277,7 @@ export default function Hero() {
               }}
             >
               {/*
-                GANTI DENGAN: <img src="URL_CLOUDINARY" alt="Acep Nurjaman" style={{ width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0 }} />
+                GANTI DENGAN: <img src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png" alt="Acep Nurjaman" style={{ width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0 }} />
               */}
               <svg
                 width="48"
@@ -301,7 +301,7 @@ export default function Hero() {
                   padding: "0 1rem",
                 }}
               >
-                PASTE CLOUDINARY URL
+                https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png
                 <br />
                 AS img src
               </span>
