@@ -41,7 +41,11 @@ export default function Nav() {
         {/* Logo */}
         <a href="#" onClick={e=>{e.preventDefault();window.scrollTo({top:0,behavior:"smooth"})}}
           style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"1.5rem", letterSpacing:"0.2em", color:"var(--ink)", textDecoration:"none" }}>
-          Acnuman
+          <img
+            src="URL_CLOUDINARY_LOGO_KAMU"
+            alt="Acnuman"
+            style={{ height: "32px", width: "auto", objectFit: "contain" }}
+          />
         </a>
 
         {/* Desktop links */}
