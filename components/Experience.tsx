@@ -2,12 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const exps = [
-  { idx:"01", company:"Freelancer", role:"Graphic Designer", period:"2017 — Present",
-    items:["Publikasi sosial media — Flyer, Story, Feed, Reels, katalog, menu, kartu bisnis","Identitas visual: brand positioning, promosi, digital marketing","Desain logo, t-shirt, Mockup, Poster, Banner","Editing Video & Photos"] },
-  { idx:"02", company:"Indonesia Beramal Sholeh", role:"Freelance Graphic Designer", period:"2023 — Present",
-    items:["Publikasi sosial media — Flyer, Story, Reels, Carousel, Tiktok Inspiration","Konten cetak: Banner, X-Banner, Poster","Editing Video & Photos","Identitas visual & digital marketing untuk web"] },
   { idx:"03", company:"PT Memori Netindo Jaya", role:"Quality Control — AutoCAD", period:"2021 — Present",
     items:["Memeriksa Technical Drawing untuk pekerjaan jalan","Konsultan dalam pengerjaan proyek jalan","Membuat Traffic Control Plan & Layout pemasangan kabel"] },
+  { idx:"01", company:"Freelancer", role:"Graphic Designer", period:"2017 — 2025",
+    items:["Publikasi sosial media — Flyer, Story, Feed, Reels, katalog, menu, kartu bisnis","Identitas visual: brand positioning, promosi, digital marketing","Desain logo, t-shirt, Mockup, Poster, Banner","Editing Video & Photos"] },
+  { idx:"02", company:"Indonesia Beramal Sholeh", role:"Freelance Graphic Designer", period:"2023 — 2025",
+    items:["Publikasi sosial media — Flyer, Story, Reels, Carousel, Tiktok Inspiration","Konten cetak: Banner, X-Banner, Poster","Editing Video & Photos","Identitas visual & digital marketing untuk web"] },
   { idx:"04", company:"Yayasan Indonesia Berkah", role:"Development Program Staff", period:"2020 — 2021",
     items:["Publikasi sosial media (Flyer, Story, Feed, Reels)","Talent sosial media untuk kebutuhan promosi","Membuat pelatihan desain grafis & menjadi coach","Pengembangan program yayasan"] },
 ];
