@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 
 const items = [
   { tag:"Brand Identity", title:"Visual Identity & Branding", desc:"Logo, brand guide, dan seluruh elemen visual brand.", wide:true,
@@ -19,62 +19,96 @@ const items = [
 function Card({ item, i }: { item:typeof items[0]; i:number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
+  
+  // Menghasilkan rotasi dan posisi acak hanya sekali saat komponen dimuat
+  const randomRotate = useMemo(() => (i % 2 === 0 ? 1 : -1) * (Math.random() * 12 + 2), [i]);
+  const randomTranslateY = useMemo(() => Math.random() * 60 - 30, []);
+
   useEffect(()=>{
-    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting){setTimeout(()=>{ if(ref.current){ref.current.style.opacity="1";ref.current.style.transform="translateY(0)";} },i*100); obs.disconnect();} },{threshold:0.1});
+    const obs = new IntersectionObserver(([e])=>{ 
+      if(e.isIntersecting){
+        setTimeout(()=>{ 
+          if(ref.current){
+            ref.current.style.opacity="1";
+            ref.current.style.transform=`translateY(${randomTranslateY}px) rotate(${randomRotate}deg)`;
+          } 
+        }, i * 150); 
+        obs.disconnect();
+      } 
+    },{threshold:0.1});
     if(ref.current) obs.observe(ref.current);
     return()=>obs.disconnect();
-  },[i]);
+  },[i, randomRotate, randomTranslateY]);
 
   return (
     <div ref={ref} style={{
-      gridColumn: item.wide ? "span 2" : "span 1",
-      aspectRatio: item.wide ? "16/7" : "4/3",
-      position:"relative", overflow:"hidden", cursor:"none",
-      opacity:0, transform:"translateY(30px)",
-      transition:"opacity 0.8s ease, transform 0.8s ease",
-      background:"var(--bg2)",
+      position:"relative",
+      width: item.wide ? "450px" : "320px",
+      aspectRatio: "4/5", // Proporsi portrait ala Polaroid / Poster
+      cursor:"none",
+      opacity:0, 
+      transform:"translateY(150px) rotate(0deg)", // State awal sebelum scroll masuk
+      transition:"all 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
+      zIndex: hovered ? 50 : 1, // Maju ke depan saat dihover
+      boxShadow: hovered ? "0 30px 60px rgba(0,0,0,0.5)" : "0 10px 30px rgba(0,0,0,0.15)",
+      background: "var(--bg2)",
+      borderRadius: "4px"
     }}
     onMouseEnter={()=>setHovered(true)}
     onMouseLeave={()=>setHovered(false)}
     >
-      {/* Image */}
+      {/* Gambar */}
       <img src={item.imgUrl} alt={item.title} style={{
         position:"absolute", inset:0, width:"100%", height:"100%",
         objectFit:"cover", display:"block",
-        transform: hovered ? "scale(1.06)" : "scale(1)",
-        transition:"transform 0.7s cubic-bezier(0.16,1,0.3,1)",
+        transform: hovered ? "scale(1.05)" : "scale(1)",
+        transition:"transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.5s ease",
+        filter: hovered ? "grayscale(0%)" : "grayscale(90%) brightness(0.8)", // Brutalist: abu-abu gelap sampai di-hover
+        borderRadius: "4px"
       }}/>
 
-      {/* Overlay */}
+      {/* Overlay Gelap (opsional) */}
       <div style={{
         position:"absolute", inset:0,
-        background:"linear-gradient(to top, rgba(14,13,10,0.92) 0%, transparent 55%)",
-        opacity: hovered ? 1 : 0,
+        background:"linear-gradient(to top, rgba(14,13,10,0.7) 0%, transparent 40%)",
+        opacity: hovered ? 1 : 0.4,
         transition:"opacity 0.4s ease",
+        borderRadius: "4px"
       }}/>
 
-      {/* Tag top-left */}
+      {/* Tag Kategori */}
       <div style={{
-        position:"absolute", top:"1.2rem", left:"1.2rem",
-        fontFamily:"'Space Mono',monospace", fontSize:"0.55rem",
+        position:"absolute", top:"1rem", right:"-1rem", // Menjorok keluar frame
+        fontFamily:"'Space Mono',monospace", fontSize:"0.6rem",
         letterSpacing:"0.15em", textTransform:"uppercase",
         background:"var(--gold)", color:"#fff",
-        padding:"0.3rem 0.7rem", fontWeight:700,
-        transform: hovered ? "translateY(0)" : "translateY(-6px)",
+        padding:"0.4rem 1rem", fontWeight:700,
+        transform: hovered ? "rotate(5deg) scale(1.1)" : "rotate(0deg) scale(1)",
         opacity: hovered ? 1 : 0,
-        transition:"all 0.35s ease",
+        transition:"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        zIndex: 2,
+        boxShadow: "4px 4px 0px var(--ink)"
       }}>{item.tag}</div>
 
-      {/* Bottom text */}
+      {/* Judul Besar Keluar Batas */}
       <div style={{
-        position:"absolute", bottom:"1.5rem", left:"1.5rem", right:"1.5rem",
-        transform: hovered ? "translateY(0)" : "translateY(12px)",
+        position:"absolute", 
+        bottom: hovered ? "-2rem" : "1.5rem", 
+        left: hovered ? "-1.5rem" : "1.5rem",
         opacity: hovered ? 1 : 0,
-        transition:"all 0.35s ease 0.05s",
-        zIndex:1,
+        transition:"all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        pointerEvents: "none",
+        zIndex: 3,
+        width: "120%"
       }}>
-        <h3 style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(1.2rem,2.5vw,2rem)", letterSpacing:"0.05em", color:"#fff", marginBottom:"0.3rem" }}>{item.title}</h3>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"0.82rem", color:"rgba(255,255,255,0.6)" }}>{item.desc}</p>
+        <h3 style={{ 
+          fontFamily:"'Bebas Neue',sans-serif", 
+          fontSize:"clamp(2.5rem,5vw,4.5rem)", 
+          lineHeight: 0.85,
+          color:"var(--gold)", 
+          // Text stroke gaya brutalist
+          textShadow: "3px 3px 0px var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink), 1px 1px 0 var(--ink)" 
+        }}>{item.title}</h3>
       </div>
     </div>
   );
@@ -83,15 +117,21 @@ function Card({ item, i }: { item:typeof items[0]; i:number }) {
 export default function Portfolio() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(()=>{
-    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting){ref.current?.querySelectorAll(".r-up,.r-clip").forEach((el,i)=>setTimeout(()=>el.classList.add("on"),i*80)); obs.disconnect();} },{threshold:0.1});
+    const obs = new IntersectionObserver(([e])=>{ 
+      if(e.isIntersecting){
+        ref.current?.querySelectorAll(".r-up,.r-clip").forEach((el,i)=>setTimeout(()=>el.classList.add("on"),i*80)); 
+        obs.disconnect();
+      } 
+    },{threshold:0.1});
     if(ref.current) obs.observe(ref.current);
     return()=>obs.disconnect();
   },[]);
 
   return (
-    <section id="portfolio" style={{ background:"var(--bg)", padding:"8rem 3rem" }}>
-      <div style={{ maxWidth:"1100px", margin:"0 auto" }} ref={ref}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:"4rem", borderBottom:"1px solid var(--line)", paddingBottom:"2rem" }}>
+    <section id="portfolio" style={{ background:"var(--bg)", padding:"8rem 3rem", overflowX:"hidden" }}>
+      <div style={{ maxWidth:"1200px", margin:"0 auto" }} ref={ref}>
+        {/* Header Tetap Rapi */}
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:"6rem", borderBottom:"2px solid var(--ink)", paddingBottom:"2rem" }}>
           <div>
             <p className="r-up" style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.58rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"var(--muted)", marginBottom:"0.8rem" }}>03 — Portfolio</p>
             <h2 className="r-up" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(3rem,6vw,6rem)", letterSpacing:"0.02em", color:"var(--ink)", lineHeight:0.9 }}>
@@ -100,23 +140,22 @@ export default function Portfolio() {
             </h2>
           </div>
           <p className="r-up" style={{ fontFamily:"'DM Serif Display',serif", fontStyle:"italic", fontSize:"1rem", color:"var(--muted)", maxWidth:"200px", textAlign:"right", lineHeight:1.6 }}>
-            Hover untuk melihat detail karya
+            Sentuh (hover) untuk menghidupkan karya.
           </p>
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem" }} className="port-grid">
+        {/* Container Flex berantakan pengganti Grid */}
+        <div style={{ 
+          display:"flex", 
+          flexWrap:"wrap", 
+          justifyContent:"center", 
+          gap:"-3rem", // Negatif gap agar saling menumpuk 
+          margin:"0 auto",
+          paddingBottom:"4rem"
+        }}>
           {items.map((item,i)=><Card key={i} item={item} i={i}/>)}
         </div>
       </div>
-
-      <style jsx>{`
-        @media(max-width:900px){
-          .port-grid{ grid-template-columns:1fr 1fr !important; }
-        }
-        @media(max-width:600px){
-          .port-grid{ grid-template-columns:1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }
