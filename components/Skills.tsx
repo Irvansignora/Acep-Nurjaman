@@ -64,22 +64,25 @@ export default function Skills() {
                 fontSize: `clamp(2rem, ${fontSize}vw, ${fontSize + 2}rem)`,
                 lineHeight: 0.85,
                 color: isOutline ? "transparent" : "var(--bg)",
+                // Di React inline style, WebkitTextStroke wajib huruf besar W
                 WebkitTextStroke: isOutline ? "1px rgba(245,240,232,0.4)" : "none",
                 textTransform: "uppercase",
-                cursor: "none", // Asumsi kamu punya custom cursor
+                cursor: "none", 
                 display: "inline-block",
                 transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.color = "var(--gold)";
                 e.currentTarget.style.transform = "skewX(-10deg) scale(1.15) translateY(-5px)";
-                e.currentTarget.style.WebkitTextStroke = "none";
+                // Di manipulasi DOM TS, webkitTextStroke wajib huruf kecil w
+                e.currentTarget.style.webkitTextStroke = "none";
                 e.currentTarget.style.zIndex = "10";
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.color = isOutline ? "transparent" : "var(--bg)";
                 e.currentTarget.style.transform = "skewX(0deg) scale(1) translateY(0)";
-                e.currentTarget.style.WebkitTextStroke = isOutline ? "1px rgba(245,240,232,0.4)" : "none";
+                // Di manipulasi DOM TS, webkitTextStroke wajib huruf kecil w
+                e.currentTarget.style.webkitTextStroke = isOutline ? "1px rgba(245,240,232,0.4)" : "none";
                 e.currentTarget.style.zIndex = "1";
               }}
               >
