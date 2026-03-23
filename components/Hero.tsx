@@ -84,33 +84,16 @@ export default function Hero() {
         GD
       </div>
 
-      {/* Top row */}
+      {/* Top right — location + availability */}
       <div
         style={{
           position: "absolute",
           top: "6.5rem",
-          left: "3rem",
           right: "3rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
           zIndex: 2,
         }}
       >
-        <div className="r-up" style={{ animationDelay: "0.1s" }}>
-          <p
-            style={{
-              fontFamily: "'Space Mono',monospace",
-              fontSize: "0.6rem",
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-            }}
-          >
-            ✦ Portfolio 2025
-          </p>
-        </div>
-        <div className="r-up" style={{ animationDelay: "0.2s", textAlign: "right" }}>
+        <div className="r-up" style={{ animationDelay: "0.1s", textAlign: "right" }}>
           <p
             style={{
               fontFamily: "'Space Mono',monospace",
