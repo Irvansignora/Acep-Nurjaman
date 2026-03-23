@@ -5,11 +5,11 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Animasi masuk untuk elemen .hero-text-shard (fade-in masuk dari vortex)
+    // Animasi masuk untuk elemen r-up (fade-in masuk)
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         ref.current?.querySelectorAll(".hero-text-shard").forEach((el, i) => {
-          // Setiap shard teks masuk dengan delay acak agar nampak seperti meledak/exploded
+          // Setiap shard teks masuk dengan delay acak
           setTimeout(() => el.classList.add("on"), Math.random() * 500 + 100);
         });
         observer.disconnect();
@@ -22,51 +22,12 @@ export default function Hero() {
 
   return (
     <section ref={ref} style={{ background: "#111", padding: "18rem 4rem 15rem 4rem", overflow: "hidden", position: "relative" }}>
-      
-      {/* --- BACKGROUND LAYER: PNG Photo (Deep Matrix Layer) --- */}
-      <div style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 0, // Paling bawah di dalam section ini
-        overflow: "hidden"
-      }}>
-        {/* --- GANTI URL INI DENGAN URL CLOUDINARY PNG KAMU --- */}
-        <img src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png" alt="Acep Nurjaman Background Layer" style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover", // Memenuhi layar tanpa distorsi
-          objectPosition: "center center",
-          
-          // --- EFEK BEHIND-THE-SCREEN: Subtil & Deep ---
-          opacity: 0.15, // Sangat tipis agar tidak overpower teks
-          filter: "grayscale(100%) blur(3px) contrast(1.2)", // Abu-abu kaku, sedikit blur, kaku (raw)
-          
-          transition: "transform 10s ease-out", // Animasi zoom lambat palsu
-          transform: "scale(1.1)", // Mulai sedikit zoom in
-        }}
-        onLoad={e => {
-          // Saat gambar dimuat, mulai animasi zoom lambat
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-        />
-        
-        {/* Subtle Dark Overlay to deepen the screen */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(180deg, rgba(17,17,17,0) 0%, rgba(17,17,17,0.8) 100%)",
-          zIndex: 1
-        }}/>
-      </div>
-
       <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative", minHeight: "60vh", zIndex: 5 }}>
         
         {/* --- DYNAMIC KINETIC TEXT SCULPTURE --- */}
         <div style={{ 
           position: "relative", 
-          zIndex: 10, // Berada di atas background
+          zIndex: 10,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -81,21 +42,20 @@ export default function Hero() {
               fontSize: "clamp(6rem, 20vw, 15rem)", // Raksasa!
               lineHeight: 0.8,
               letterSpacing: "-0.04em",
-              color: "#C4A77D", // Gold dari visual konsep baru
+              color: "#C4A77D", // Gold
               textTransform: "uppercase",
               fontWeight: 400,
               display: "inline-block",
-              transition: "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease, text-shadow 0.3s ease",
-              cursor: "crosshair",
-              textShadow: "0 0 5px rgba(196,167,125,0.2)",
+              transition: "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease",
+              cursor: "crosshair"
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = "perspective(1000px) scale(1.1) rotateY(10deg) skewX(2deg)";
-              e.currentTarget.style.textShadow = "0 0 25px rgba(196,167,125,0.9), 0 0 50px rgba(196,167,125,0.6)";
+              e.currentTarget.style.textShadow = "0 0 20px rgba(196,167,125,0.7)";
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = "perspective(1000px) scale(1) rotateY(0deg) skewX(0deg)";
-              e.currentTarget.style.textShadow = "0 0 5px rgba(196,167,125,0.2)";
+              e.currentTarget.style.textShadow = "none";
             }}
             >
               ACEP NURJAMAN
@@ -105,7 +65,7 @@ export default function Hero() {
             <span className="hero-text-shard name-acep" style={{
               fontFamily: "'Bebas Neue',sans-serif",
               fontSize: "clamp(3rem, 10vw, 8rem)",
-              color: "#FFF", // Solid White
+              color: "#FFF",
               textTransform: "uppercase",
               position: "absolute",
               top: "-5rem", left: "0",
@@ -126,7 +86,7 @@ export default function Hero() {
             <span className="hero-text-shard name-nurjaman" style={{
               fontFamily: "'Bebas Neue',sans-serif",
               fontSize: "clamp(3rem, 10vw, 8rem)",
-              color: "rgba(196,167,125,0.7)", // Semitransparan gold
+              color: "rgba(196,167,125,0.6)", // Sedikit transparansi gold
               textTransform: "uppercase",
               position: "absolute",
               bottom: "-5rem", right: "0",
@@ -144,7 +104,7 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Titles: Exploded Shards (Melayang & Interaktif) */}
+          {/* Titles: Exploded Shards (Rotating in different directions) */}
           <div style={{ position: "relative", alignSelf: "flex-end", marginRight: "5rem" }}>
             <p className="hero-text-shard title-graphic" style={{
               fontFamily: "'Bebas Neue',sans-serif",
@@ -153,18 +113,18 @@ export default function Hero() {
               textTransform: "uppercase",
               position: "absolute",
               top: "0", right: "10rem",
-              transform: "perspective(1000px) rotateY(-30deg) skewY(5deg)", // Rotasi kaku beda arah
+              transform: "perspective(1000px) rotateY(-30deg) skewY(5deg)", // Rotasi agresif
               transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-              animation: "float1 5s ease-in-out infinite alternate" // Melayang lambat
+              animation: "float1 5s ease-in-out infinite alternate" // Melayang palsu
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = "#C4A77D";
-              e.currentTarget.style.transform = "perspective(1000px) rotateY(0deg) skewY(0deg) scale(1.1) translateY(-5px)";
+              e.currentTarget.style.transform = "perspective(1000px) rotateY(0deg) skewY(0deg) scale(1.1)";
               e.currentTarget.style.animationPlayState = "paused";
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = "#F5F0E8";
-              e.currentTarget.style.transform = "perspective(1000px) rotateY(-30deg) skewY(5deg) scale(1) translateY(0)";
+              e.currentTarget.style.transform = "perspective(1000px) rotateY(-30deg) skewY(5deg) scale(1)";
               e.currentTarget.style.animationPlayState = "running";
             }}
             >
@@ -174,23 +134,23 @@ export default function Hero() {
             <p className="hero-text-shard title-technical" style={{
               fontFamily: "'Bebas Neue',sans-serif",
               fontSize: "clamp(2rem, 5vw, 4rem)",
-              color: "rgba(196,167,125,0.8)", // Semitransparan gold
+              color: "rgba(196,167,125,0.7)", // Semitransparan gold
               textTransform: "uppercase",
               position: "absolute",
               bottom: "0", left: "-10rem",
-              transform: "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg)", // Rotasi agresif kaku
+              transform: "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg)", // Rotasi agresif beda arah
               transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-              animation: "float2 6s ease-in-out infinite alternate" // Melayang lambat beda arah
+              animation: "float2 6s ease-in-out infinite alternate" // Melayang palsu
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = "#C4A77D";
-              e.currentTarget.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) skewX(0deg) scale(1.15) translateY(5px)";
+              e.currentTarget.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) skewX(0deg) scale(1.15)";
               e.currentTarget.style.zIndex = "20";
               e.currentTarget.style.animationPlayState = "paused";
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = "rgba(196,167,125,0.8)";
-              e.currentTarget.style.transform = "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg) scale(1) translateY(0)";
+              e.currentTarget.style.color = "rgba(196,167,125,0.7)";
+              e.currentTarget.style.transform = "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg) scale(1)";
               e.currentTarget.style.zIndex = "10";
               e.currentTarget.style.animationPlayState = "running";
             }}
@@ -201,7 +161,7 @@ export default function Hero() {
 
         </div>
 
-        {/* --- ABOUT Block: Editorial & Subtil --- */}
+        {/* --- ABOUT Block: Interwoven Editorial --- */}
         <div style={{ position: "absolute", bottom: "4rem", left: "4rem", zIndex: 5, maxWidth: "500px" }}>
           <p className="hero-text-shard" style={{
             fontFamily: "'DM Serif Display',serif",
@@ -217,13 +177,13 @@ export default function Hero() {
             fontFamily: "'Space Mono',monospace",
             fontSize: "0.85rem",
             lineHeight: 1.8,
-            color: "rgba(245,240,232,0.6)", // Sedikit transparansi off-white
+            color: "rgba(245,240,232,0.6)",
           }}>
-            Fusing technical rigor with creative fluency. Consistently translating complex concepts into precise technical documents and impactful visual identities. A fusion of technical rigor and creative fluency. Optimized for clarity and impact.
+            Fusing technical rigor with creative fluency. Consistently translating complex concepts into precise technical documents and impactful visual identities. A fusion of technical rigor and creative fluency.
           </p>
         </div>
         
-        {/* --- SCROLLING MARQUEE (Opacity Tipis) --- */}
+        {/* --- SCROLLING MARQUEE --- */}
         <div style={{
           position: "absolute",
           top: "4rem", right: "0",
@@ -232,23 +192,23 @@ export default function Hero() {
           display: "flex",
           transform: "rotate(15deg) translateY(-50%)",
           transformOrigin: "top right",
-          zIndex: 1, // Di belakang teks tapi di atas background layer
-          opacity: 0.25 // Sangat tipis
+          zIndex: 1,
+          opacity: 0.15 // Tipis aja biar fokus ke nama lu
         }}>
           <div className="hero-text-shard" style={{
             display: "flex",
             gap: "2rem",
             whiteSpace: "nowrap",
-            animation: "marquee 25s linear infinite" // Lambat
+            animation: "marquee 20s linear infinite"
           }}>
-            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.75rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
-            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.75rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
+            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.8rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
+            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.8rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
           </div>
         </div>
         
       </div>
 
-      {/* --- CSS Global untuk Keyframes, Floats, dan Kelas .on --- */}
+      {/* --- CSS Global untuk Animasi Melayang dan Fade --- */}
       <style jsx global>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
