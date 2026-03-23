@@ -74,7 +74,7 @@ export default function Hero() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        padding: "0 3rem 5.5rem",
+        padding: "0 3rem 10vh",
       }}
     >
 
@@ -205,7 +205,7 @@ export default function Hero() {
           display: "flex",
           flexWrap: "wrap",
           gap: "0 0.22em",
-          minHeight: "3em",
+          minHeight: "2.2em",
           alignContent: "flex-end",
           maxWidth: "70vw", // tidak overlap ke foto
         }}>
