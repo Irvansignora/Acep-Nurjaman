@@ -109,7 +109,7 @@ export default function Hero() {
       >
         {/* Foto asli — tidak crop, posisi natural dari bawah */}
         <img
-          src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png"
+          src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1774235590/Acep-removebg-preview_iikds5.png"
           alt="Acep Nurjaman"
           style={{
             width: "100%",
