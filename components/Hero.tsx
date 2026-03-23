@@ -2,197 +2,96 @@
 import { useEffect, useRef } from "react";
 
 export default function Hero() {
-  const secRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const el = secRef.current; if (!el) return;
-
-    // Skew on scroll
-    const onScroll = () => {
-      const y = window.scrollY;
-      const skew = Math.min(y * 0.012, 3);
-      el.style.transform = `skewY(-${skew}deg)`;
-      const bg = el.querySelector<HTMLDivElement>(".hero-img-wrap");
-      if (bg) bg.style.transform = `translateY(${y * 0.28}px)`;
-    };
-    window.addEventListener("scroll", onScroll, { passive:true });
-
-    // Stagger reveal after loader
-    const els = el.querySelectorAll<HTMLElement>(".r-up,.r-clip,.r-fade");
-    setTimeout(() => {
-      els.forEach((e, i) => setTimeout(() => e.classList.add("on"), i * 120));
-    }, 1900);
-
-    return () => window.removeEventListener("scroll", onScroll);
+    // Animasi masuk untuk elemen r-up
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        ref.current?.querySelectorAll(".r-up").forEach((el, i) => {
+          setTimeout(() => el.classList.add("on"), i * 150);
+        });
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section ref={secRef} id="hero" style={{
-      position:"relative", minHeight:"100vh",
-      display:"flex", flexDirection:"column", justifyContent:"flex-end",
-      padding:"0 3rem 4rem",
-      willChange:"transform",
-      overflow:"hidden",
-    }}>
-      {/* Big background number */}
-      <div style={{
-        position:"absolute", right:"-0.05em", top:"50%",
-        transform:"translateY(-50%)",
-        fontFamily:"'Bebas Neue',sans-serif",
-        fontSize:"clamp(28vw,40vw,55vw)",
-        lineHeight:1, color:"rgba(14,13,10,0.04)",
-        letterSpacing:"-0.02em",
-        pointerEvents:"none", userSelect:"none",
-        zIndex:0,
-      }}>GD</div>
-
-      {/* Top row */}
-      <div style={{
-        position:"absolute", top:"6.5rem", left:"3rem", right:"3rem",
-        display:"flex", justifyContent:"space-between", alignItems:"flex-start",
-        zIndex:2,
-      }}>
-        <div className="r-up" style={{ animationDelay:"0.1s" }}>
-          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"var(--muted)" }}>
-            ✦ Portfolio 2025
+    <section ref={ref} style={{ background: "var(--ink)", padding: "15rem 4rem 10rem 4rem", overflow: "hidden" }}>
+      <div style={{ maxWidth: "1300px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "start", gap: "5rem" }}>
+        
+        {/* --- LEFT SIDE: Massive Vertically Stacked Gold Name (Brutalist) --- */}
+        <div style={{ writingMode: "vertical-lr", transform: "rotate(180deg)", textAlign: "right", borderLeft: "2px solid rgba(196,167,125,0.2)", paddingRight: "1rem" }}>
+          <p className="r-up" style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.6rem", letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(196,167,125,0.4)", marginBottom: "1.5rem" }}>
+            01 — ABOUT
           </p>
+          <h1 className="r-up" style={{
+            fontFamily: "'Bebas Neue',sans-serif",
+            fontSize: "clamp(6rem, 15vw, 12rem)", // Raksasa!
+            lineHeight: 0.8,
+            letterSpacing: "-0.02em",
+            color: "#C4A77D", // Desaturated Gold dari Konsep
+            textTransform: "uppercase",
+            fontWeight: 400
+          }}>
+            ACEP NURJAMAN
+          </h1>
         </div>
-        <div className="r-up" style={{ animationDelay:"0.2s", textAlign:"right" }}>
-          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--muted)" }}>
-            Jakarta, Indonesia
-          </p>
-          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--muted)", marginTop:"0.2rem" }}>
-            Available for Freelance
-          </p>
-        </div>
-      </div>
 
-      {/* Grid layout */}
-      <div style={{
-        position:"relative", zIndex:2,
-        display:"grid",
-        gridTemplateColumns:"1fr auto",
-        gap:"3rem",
-        alignItems:"flex-end",
-      }} className="hero-inner">
-
-        {/* LEFT — giant name */}
-        <div>
-          {/* Eyebrow */}
-          <div className="r-clip" style={{ marginBottom:"1.5rem", overflow:"hidden" }}>
+        {/* --- RIGHT SIDE: Raw Editorial Intro & Sketch Pair --- */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "4rem", marginTop: "4rem" }}>
+          
+          {/* Editorial Paragraph */}
+          <div className="r-up" style={{ borderLeft: "1px solid rgba(245,240,232,0.1)", paddingLeft: "2rem" }}>
             <p style={{
-              fontFamily:"'Space Mono',monospace", fontSize:"0.65rem",
-              letterSpacing:"0.3em", textTransform:"uppercase",
-              display:"flex", alignItems:"center", gap:"1rem",
-              color:"var(--ink)",
+              fontFamily: "'DM Serif Display',serif",
+              fontStyle: "italic",
+              fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+              lineHeight: 1.4,
+              color: "var(--bg)", // Off-white
+              maxWidth: "800px",
+              marginBottom: "1rem"
             }}>
-              <span style={{ width:"40px", height:"1px", background:"var(--ink)", display:"inline-block" }}/>
-              Graphic Designer
+              Acep Nurjaman is a graphic designer & technical artist specializing in AutoCAD Technical Drawing.
+            </p>
+            <p style={{
+              fontFamily: "'Space Mono',monospace",
+              fontSize: "0.85rem",
+              lineHeight: 1.8,
+              color: "rgba(245,240,232,0.6)",
+              maxWidth: "600px"
+            }}>
+              Consistently translating complex concepts into precise technical documents and impactful visual identities. A fusion of technical rigor and creative fluency.
             </p>
           </div>
 
-          {/* Name */}
-          <div style={{ overflow:"hidden" }}>
-            <h1 className="r-up" style={{
-              fontFamily:"'Bebas Neue',sans-serif",
-              fontSize:"clamp(5rem,13vw,14rem)",
-              lineHeight:0.88,
-              letterSpacing:"-0.01em",
-              color:"var(--ink)",
-            }}>
-              Acep<br/>
-              <span style={{ WebkitTextStroke:"1.5px var(--ink)", color:"transparent" }}>
-                Nurjaman
-              </span>
-            </h1>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="r-up" style={{ marginTop:"2.5rem", display:"flex", alignItems:"center", gap:"2.5rem", flexWrap:"wrap" }}>
+          {/* Sketch Section */}
+          <div className="r-up" style={{ display: "flex", alignItems: "center", gap: "3rem", alignSelf: "flex-end" }}>
             <p style={{
-              fontFamily:"'DM Serif Display',serif",
-              fontSize:"clamp(0.9rem,1.5vw,1.1rem)",
-              fontStyle:"italic",
-              color:"var(--muted)",
-              maxWidth:"320px",
-              lineHeight:1.6,
+              fontFamily: "'Space Mono',monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.2em",
+              color: "rgba(245,240,232,0.3)",
+              maxWidth: "150px",
+              textAlign: "right"
             }}>
-              Mewujudkan ide menjadi visual yang berbicara — 5+ tahun pengalaman.
+              HAND-DRAWN VECTOR SKETCH: ACEP N.
             </p>
-            <div style={{ display:"flex", gap:"1rem" }}>
-              <button onClick={()=>document.querySelector("#portfolio")?.scrollIntoView({behavior:"smooth"})}
-                style={{
-                  fontFamily:"'Space Mono',monospace", fontSize:"0.6rem",
-                  letterSpacing:"0.15em", textTransform:"uppercase",
-                  background:"var(--ink)", color:"var(--bg)",
-                  padding:"0.8rem 2rem", border:"none", cursor:"none",
-                  fontWeight:700, transition:"background 0.25s",
-                }}
-                onMouseEnter={e=>e.currentTarget.style.background="var(--gold)"}
-                onMouseLeave={e=>e.currentTarget.style.background="var(--ink)"}
-              >See Work</button>
-              <a href="mailto:acman2602@gmail.com" style={{
-                fontFamily:"'Space Mono',monospace", fontSize:"0.6rem",
-                letterSpacing:"0.15em", textTransform:"uppercase",
-                background:"transparent", color:"var(--ink)",
-                padding:"0.8rem 2rem",
-                border:"1px solid rgba(14,13,10,0.25)",
-                cursor:"none", textDecoration:"none",
-                transition:"border-color 0.25s",
-              }}
-              onMouseEnter={e=>e.currentTarget.style.borderColor="var(--ink)"}
-              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(14,13,10,0.25)"}
-              >Contact</a>
-            </div>
+            {/* Ganti URL_SKETCH_VEKTOR_KAMU dengan link gambar sketsa yang ada di visual baru */}
+            <img src="/sketch_acep.png" alt="Acep Nurjaman Vektor Sketsa" style={{
+              width: "200px",
+              height: "200px",
+              objectFit: "contain",
+              opacity: 0.9,
+              filter: "brightness(1.1) contrast(0.9)" // Sedikit kaku (raw)
+            }}/>
           </div>
         </div>
 
-        {/* RIGHT — photo */}
-        <div className="hero-img-wrap r-fade" style={{
-          width:"clamp(160px,18vw,280px)",
-          aspectRatio:"3/4",
-          overflow:"hidden",
-          borderRadius:"2px",
-          position:"relative",
-          flexShrink:0,
-          alignSelf:"flex-end",
-        }}>
-          <img
-            src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png"
-            alt="Acep Nurjaman"
-            style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block" }}
-          />
-          {/* Gold tag */}
-          <div style={{
-            position:"absolute", bottom:"1rem", left:"1rem",
-            background:"var(--gold)", color:"#fff",
-            fontFamily:"'Space Mono',monospace", fontSize:"0.52rem",
-            letterSpacing:"0.12em", textTransform:"uppercase",
-            padding:"0.3rem 0.7rem", fontWeight:700,
-          }}>5+ Yrs</div>
-        </div>
       </div>
-
-      {/* Scroll cue */}
-      <div className="r-fade" style={{
-        position:"absolute", bottom:"2.5rem", left:"50%",
-        transform:"translateX(-50%)",
-        display:"flex", flexDirection:"column", alignItems:"center", gap:"0.5rem",
-        zIndex:2,
-      }}>
-        <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.5rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"var(--muted)" }}>Scroll</span>
-        <div style={{ width:"1px", height:"36px", background:"linear-gradient(to bottom,var(--ink),transparent)", animation:"scrollDrop 2s ease infinite" }}/>
-      </div>
-
-      <style jsx>{`
-        @keyframes scrollDrop {
-          0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.5)}
-        }
-        @media(max-width:768px){
-          .hero-inner{ grid-template-columns:1fr !important; }
-          .hero-img-wrap{ display:none !important; }
-        }
-      `}</style>
     </section>
   );
 }
