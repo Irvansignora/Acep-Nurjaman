@@ -115,9 +115,6 @@ export default function Experience() {
               <span style={{ WebkitTextStroke:"1px var(--ink)", color:"transparent" }}>Kerja</span>
             </h2>
           </div>
-          <p className="r-up" style={{ fontFamily:"'DM Serif Display',serif", fontStyle:"italic", fontSize:"1rem", color:"var(--muted)", maxWidth:"220px", textAlign:"right", lineHeight:1.6 }}>
-            Klik pada area baris untuk membuka detail pekerjaan.
-          </p>
         </div>
 
         {/* Accordion rows */}
