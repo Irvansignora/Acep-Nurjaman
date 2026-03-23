@@ -47,11 +47,15 @@ body {
   border: 1px solid rgba(14,13,10,0.4);
   border-radius: 50%;
   transform: translate(-50%,-50%);
-  transition: width 0.25s ease, height 0.25s ease, border-color 0.2s, background 0.2s;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.25s, background 0.25s, transform 0.08s;
 }
 body.c-hover #c-dot  { width: 12px; height: 12px; background: var(--gold); }
 body.c-hover #c-ring { width: 56px; height: 56px; border-color: var(--gold); background: rgba(184,146,42,0.06); }
 body.c-text  #c-ring { width: 80px; height: 80px; background: rgba(14,13,10,0.06); border-color: transparent; }
+
+/* Cursor on gold section (CTA band) */
+body.c-gold-section #c-dot  { background: #fff; mix-blend-mode: normal; }
+body.c-gold-section #c-ring { border-color: rgba(255,255,255,0.5); }
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 2px; }
@@ -143,3 +147,38 @@ body.c-text  #c-ring { width: 80px; height: 80px; background: rgba(14,13,10,0.06
 
 /* ── SKEW ON SCROLL ── */
 .skew-wrap { will-change: transform; }
+
+/* ── ACCESSIBILITY: Respect reduced motion preference ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .r-up,
+  .r-clip,
+  .r-fade {
+    opacity: 1 !important;
+    clip-path: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .r-up.on,
+  .r-clip.on,
+  .r-fade.on {
+    animation: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+  .mq-inner {
+    animation: none !important;
+  }
+  #loader-bar-fill {
+    animation: none !important;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
