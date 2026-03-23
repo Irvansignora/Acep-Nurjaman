@@ -13,48 +13,78 @@ const exps = [
 ];
 
 function Row({ exp, i }: { exp:typeof exps[0]; i:number }) {
-  const [open, setOpen] = useState(false);
+  // i === 0 membuat pekerjaan paling atas otomatis terbuka (Open by default)
+  const [open, setOpen] = useState(i === 0);
   const ref = useRef<HTMLDivElement>(null);
+  
   useEffect(()=>{
-    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting){setTimeout(()=>ref.current?.classList.add("on"),i*80); obs.disconnect();} },{threshold:0.15});
+    const obs = new IntersectionObserver(([e])=>{ 
+      if(e.isIntersecting){
+        setTimeout(()=>ref.current?.classList.add("on"),i*80); 
+        obs.disconnect();
+      } 
+    },{threshold:0.15});
     if(ref.current) obs.observe(ref.current);
     return()=>obs.disconnect();
   },[i]);
 
   return (
     <div ref={ref} className="r-up" style={{ borderBottom:"1px solid var(--line)" }}>
+      {/* Tombol Accordion */}
       <button onClick={()=>setOpen(!open)} style={{
-        width:"100%", background:"none", border:"none", cursor:"none",
+        width:"100%", background:"none", border:"none", cursor:"none", // cursor none karena pakai custom cursor
         display:"grid", gridTemplateColumns:"60px 1fr auto auto",
-        alignItems:"center", gap:"2rem", padding:"2rem 0",
-        textAlign:"left",
+        alignItems:"center", gap:"2rem", padding:"2.5rem 0",
+        textAlign:"left", outline: "none"
       }}
       onMouseEnter={e=>e.currentTarget.style.background="rgba(14,13,10,0.02)"}
       onMouseLeave={e=>e.currentTarget.style.background="none"}
       >
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", color:"var(--muted)", letterSpacing:"0.1em" }}>{exp.idx}</span>
+        
         <div>
           <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(1.4rem,3vw,2.2rem)", letterSpacing:"0.05em", color:"var(--ink)", lineHeight:1 }}>{exp.company}</div>
-          <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.58rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"var(--gold)", marginTop:"0.2rem" }}>{exp.role}</div>
+          <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.58rem", letterSpacing:"0.12em", textTransform:"uppercase", color:"var(--gold)", marginTop:"0.4rem" }}>{exp.role}</div>
         </div>
+        
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.58rem", color:"var(--muted)", whiteSpace:"nowrap" }}>{exp.period}</span>
-        <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"1rem", color:"var(--ink)", transition:"transform 0.3s", transform: open?"rotate(45deg)":"none", display:"inline-block" }}>+</span>
+        
+        {/* Indikator Plus / Minus yang lebih interaktif */}
+        <div style={{ 
+          width: "35px", height: "35px", 
+          borderRadius: "50%", border: "1px solid var(--line)", 
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+          background: open ? "var(--ink)" : "transparent",
+          color: open ? "var(--bg)" : "var(--ink)"
+        }}>
+          <span style={{ 
+            fontFamily:"'Space Mono',monospace", 
+            fontSize:"1.2rem", 
+            lineHeight: 0,
+            marginTop: "-2px", // Fix alignment visual
+            transition:"transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", 
+            transform: open ? "rotate(45deg)" : "rotate(0deg)" 
+          }}>+</span>
+        </div>
       </button>
 
-      {/* Accordion body */}
+      {/* Accordion Body: Menggunakan CSS Grid Transition agar konten tidak terpotong */}
       <div style={{
-        maxHeight: open ? "300px" : "0",
-        overflow:"hidden",
-        transition:"max-height 0.5s cubic-bezier(0.77,0,0.18,1)",
+        display: "grid",
+        gridTemplateRows: open ? "1fr" : "0fr",
+        transition: "grid-template-rows 0.5s cubic-bezier(0.77,0,0.18,1)",
       }}>
-        <ul style={{ padding:"0 0 2rem 4rem", display:"flex", flexDirection:"column", gap:"0.5rem" }}>
-          {exp.items.map((item,j)=>(
-            <li key={j} style={{ fontSize:"0.9rem", color:"var(--ink2)", paddingLeft:"1.2rem", position:"relative", lineHeight:1.7 }}>
-              <span style={{ position:"absolute", left:0, color:"var(--gold)" }}>›</span>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div style={{ overflow:"hidden" }}>
+          <ul style={{ padding:"0 0 2.5rem 4rem", display:"flex", flexDirection:"column", gap:"0.8rem" }}>
+            {exp.items.map((item,j)=>(
+              <li key={j} style={{ fontFamily: "'DM Sans', sans-serif", fontSize:"0.95rem", color:"var(--ink2)", paddingLeft:"1.5rem", position:"relative", lineHeight:1.7 }}>
+                <span style={{ position:"absolute", left:0, color:"var(--gold)", fontWeight: "bold" }}>›</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -63,7 +93,12 @@ function Row({ exp, i }: { exp:typeof exps[0]; i:number }) {
 export default function Experience() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(()=>{
-    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting){ref.current?.querySelectorAll(".r-up,.r-clip").forEach((el,i)=>setTimeout(()=>el.classList.add("on"),i*80)); obs.disconnect();} },{threshold:0.1});
+    const obs = new IntersectionObserver(([e])=>{ 
+      if(e.isIntersecting){
+        ref.current?.querySelectorAll(".r-up,.r-clip").forEach((el,i)=>setTimeout(()=>el.classList.add("on"),i*80)); 
+        obs.disconnect();
+      } 
+    },{threshold:0.1});
     if(ref.current) obs.observe(ref.current);
     return()=>obs.disconnect();
   },[]);
@@ -81,7 +116,7 @@ export default function Experience() {
             </h2>
           </div>
           <p className="r-up" style={{ fontFamily:"'DM Serif Display',serif", fontStyle:"italic", fontSize:"1rem", color:"var(--muted)", maxWidth:"220px", textAlign:"right", lineHeight:1.6 }}>
-            Klik untuk lihat detail pekerjaan
+            Klik pada area baris untuk membuka detail pekerjaan.
           </p>
         </div>
 
