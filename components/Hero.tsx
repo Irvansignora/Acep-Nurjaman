@@ -74,7 +74,7 @@ export default function Hero() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        padding: "0 3rem 10vh",
+        padding: "80px 3rem 8vh",
       }}
     >
 
@@ -199,13 +199,13 @@ export default function Hero() {
         {/* WORD-BY-WORD HEADLINE */}
         <h1 style={{
           fontFamily: "'Bebas Neue',sans-serif",
-          fontSize: "clamp(3.8rem,10vw,11rem)",
+          fontSize: "clamp(3rem,7.5vw,8.5rem)",
           lineHeight: 0.88,
           letterSpacing: "-0.01em",
           display: "flex",
           flexWrap: "wrap",
           gap: "0 0.22em",
-          minHeight: "2.2em",
+          minHeight: "unset",
           alignContent: "flex-end",
           maxWidth: "70vw", // tidak overlap ke foto
         }}>
