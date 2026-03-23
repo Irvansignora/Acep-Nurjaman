@@ -136,9 +136,6 @@ export default function Portfolio() {
               <span style={{ WebkitTextStroke:"1px var(--ink)", color:"transparent" }}>Terpilih</span>
             </h2>
           </div>
-          <p className="r-up" style={{ fontFamily:"'DM Serif Display',serif", fontStyle:"italic", fontSize:"1.2rem", color:"var(--muted)", maxWidth:"250px", textAlign:"right", lineHeight:1.7 }}>
-            Sentuh (hover) untuk mengaktifkan efek 'Warp Drive'.
-          </p>
         </div>
 
         {/* Container Flex dengan NEGATIVE GAP agar saling menumpuk secara masif */}
