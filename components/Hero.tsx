@@ -2,272 +2,195 @@
 import { useEffect, useRef } from "react";
 
 export default function Hero() {
-  const ref = useRef<HTMLElement>(null);
+  const secRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Animasi masuk untuk elemen .hero-text-shard (fade-in masuk dari vortex)
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        ref.current?.querySelectorAll(".hero-text-shard").forEach((el, i) => {
-          // Setiap shard teks masuk dengan delay acak agar nampak seperti meledak/exploded
-          setTimeout(() => el.classList.add("on"), Math.random() * 500 + 100);
-        });
-        observer.disconnect();
-      }
-    }, { threshold: 0.1 });
-    
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    const el = secRef.current; if (!el) return;
+
+    // Skew on scroll
+    const onScroll = () => {
+      const y = window.scrollY;
+      const skew = Math.min(y * 0.012, 3);
+      el.style.transform = `skewY(-${skew}deg)`;
+      const bg = el.querySelector<HTMLDivElement>(".hero-img-wrap");
+      if (bg) bg.style.transform = `translateY(${y * 0.28}px)`;
+    };
+    window.addEventListener("scroll", onScroll, { passive:true });
+
+    // Stagger reveal after loader
+    const els = el.querySelectorAll<HTMLElement>(".r-up,.r-clip,.r-fade");
+    setTimeout(() => {
+      els.forEach((e, i) => setTimeout(() => e.classList.add("on"), i * 120));
+    }, 1900);
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <section ref={ref} style={{ background: "#111", padding: "18rem 4rem 15rem 4rem", overflow: "hidden", position: "relative" }}>
-      
-      {/* --- BACKGROUND LAYER: PNG Photo (Deep Matrix Layer) --- */}
+    <section ref={secRef} id="hero" style={{
+      position:"relative", minHeight:"100vh",
+      display:"flex", flexDirection:"column", justifyContent:"flex-end",
+      padding:"0 3rem 4rem",
+      willChange:"transform",
+      overflow:"hidden",
+    }}>
+      {/* Big background number */}
       <div style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 0, // Paling bawah di dalam section ini
-        overflow: "hidden"
+        position:"absolute", right:"-0.05em", top:"50%",
+        transform:"translateY(-50%)",
+        fontFamily:"'Bebas Neue',sans-serif",
+        fontSize:"clamp(28vw,40vw,55vw)",
+        lineHeight:1, color:"rgba(14,13,10,0.04)",
+        letterSpacing:"-0.02em",
+        pointerEvents:"none", userSelect:"none",
+        zIndex:0,
+      }}>GD</div>
+
+      {/* Top row */}
+      <div style={{
+        position:"absolute", top:"6.5rem", left:"3rem", right:"3rem",
+        display:"flex", justifyContent:"space-between", alignItems:"flex-start",
+        zIndex:2,
       }}>
-        {/* --- GANTI URL INI DENGAN URL CLOUDINARY PNG KAMU --- */}
-        <img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/background_hero.png" alt="Acep Nurjaman Background Layer" style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover", // Memenuhi layar tanpa distorsi
-          objectPosition: "center center",
-          
-          // --- EFEK BEHIND-THE-SCREEN: Subtil & Deep ---
-          opacity: 0.15, // Sangat tipis agar tidak overpower teks
-          filter: "grayscale(100%) blur(3px) contrast(1.2)", // Abu-abu kaku, sedikit blur, kaku (raw)
-          
-          transition: "transform 10s ease-out", // Animasi zoom lambat palsu
-          transform: "scale(1.1)", // Mulai sedikit zoom in
-        }}
-        onLoad={e => {
-          // Saat gambar dimuat, mulai animasi zoom lambat
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-        />
-        
-        {/* Subtle Dark Overlay to deepen the screen */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(180deg, rgba(17,17,17,0) 0%, rgba(17,17,17,0.8) 100%)",
-          zIndex: 1
-        }}/>
+        <div className="r-up" style={{ animationDelay:"0.1s" }}>
+          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"var(--muted)" }}>
+            ✦ Portfolio 2025
+          </p>
+        </div>
+        <div className="r-up" style={{ animationDelay:"0.2s", textAlign:"right" }}>
+          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--muted)" }}>
+            Jakarta, Indonesia
+          </p>
+          <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--muted)", marginTop:"0.2rem" }}>
+            Available for Freelance
+          </p>
+        </div>
       </div>
 
-      <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative", minHeight: "60vh", zIndex: 5 }}>
-        
-        {/* --- DYNAMIC KINETIC TEXT SCULPTURE --- */}
-        <div style={{ 
-          position: "relative", 
-          zIndex: 10, // Berada di atas background
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          transform: "perspective(1000px)", // Berikan kedalaman 3D
-        }}>
-          
-          {/* Main Name: Exploded Shards */}
-          <div style={{ position: "relative", marginBottom: "3rem" }}>
-            <h1 className="hero-text-shard main-name" style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(6rem, 20vw, 15rem)", // Raksasa!
-              lineHeight: 0.8,
-              letterSpacing: "-0.04em",
-              color: "#C4A77D", // Gold dari visual konsep baru
-              textTransform: "uppercase",
-              fontWeight: 400,
-              display: "inline-block",
-              transition: "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease, text-shadow 0.3s ease",
-              cursor: "crosshair",
-              textShadow: "0 0 5px rgba(196,167,125,0.2)",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = "perspective(1000px) scale(1.1) rotateY(10deg) skewX(2deg)";
-              e.currentTarget.style.textShadow = "0 0 25px rgba(196,167,125,0.9), 0 0 50px rgba(196,167,125,0.6)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = "perspective(1000px) scale(1) rotateY(0deg) skewX(0deg)";
-              e.currentTarget.style.textShadow = "0 0 5px rgba(196,167,125,0.2)";
-            }}
-            >
-              ACEP NURJAMAN
+      {/* Grid layout */}
+      <div style={{
+        position:"relative", zIndex:2,
+        display:"grid",
+        gridTemplateColumns:"1fr auto",
+        gap:"3rem",
+        alignItems:"flex-end",
+      }} className="hero-inner">
+
+        {/* LEFT — giant name */}
+        <div>
+          {/* Eyebrow */}
+          <div className="r-clip" style={{ marginBottom:"1.5rem", overflow:"hidden" }}>
+            <p style={{
+              fontFamily:"'Space Mono',monospace", fontSize:"0.65rem",
+              letterSpacing:"0.3em", textTransform:"uppercase",
+              display:"flex", alignItems:"center", gap:"1rem",
+              color:"var(--ink)",
+            }}>
+              <span style={{ width:"40px", height:"1px", background:"var(--ink)", display:"inline-block" }}/>
+              Graphic Designer
+            </p>
+          </div>
+
+          {/* Name */}
+          <div style={{ overflow:"hidden" }}>
+            <h1 className="r-up" style={{
+              fontFamily:"'Bebas Neue',sans-serif",
+              fontSize:"clamp(5rem,13vw,14rem)",
+              lineHeight:0.88,
+              letterSpacing:"-0.01em",
+              color:"var(--ink)",
+            }}>
+              Acep<br/>
+              <span style={{ WebkitTextStroke:"1.5px var(--ink)", color:"transparent" }}>
+                Nurjaman
+              </span>
             </h1>
-            
-            {/* Shard: ACEP */}
-            <span className="hero-text-shard name-acep" style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(3rem, 10vw, 8rem)",
-              color: "#FFF", // Solid White
-              textTransform: "uppercase",
-              position: "absolute",
-              top: "-5rem", left: "0",
-              zIndex: 11,
-              transition: "all 0.4s ease",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = "translateX(30px) translateY(-10px) rotate(5deg) scale(1.1)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = "translateX(0) translateY(0) rotate(0) scale(1)";
-            }}
-            >
-              ACEP
-            </span>
-            
-            {/* Shard: NURJAMAN */}
-            <span className="hero-text-shard name-nurjaman" style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(3rem, 10vw, 8rem)",
-              color: "rgba(196,167,125,0.7)", // Semitransparan gold
-              textTransform: "uppercase",
-              position: "absolute",
-              bottom: "-5rem", right: "0",
-              zIndex: 11,
-              transition: "all 0.4s ease",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = "translateX(-30px) translateY(10px) rotate(-5deg) scale(1.1)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = "translateX(0) translateY(0) rotate(0) scale(1)";
-            }}
-            >
-              NURJAMAN
-            </span>
           </div>
 
-          {/* Titles: Exploded Shards (Melayang & Interaktif) */}
-          <div style={{ position: "relative", alignSelf: "flex-end", marginRight: "5rem" }}>
-            <p className="hero-text-shard title-graphic" style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(2rem, 5vw, 4rem)",
-              color: "#F5F0E8", // Off-white
-              textTransform: "uppercase",
-              position: "absolute",
-              top: "0", right: "10rem",
-              transform: "perspective(1000px) rotateY(-30deg) skewY(5deg)", // Rotasi kaku beda arah
-              transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-              animation: "float1 5s ease-in-out infinite alternate" // Melayang lambat
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = "#C4A77D";
-              e.currentTarget.style.transform = "perspective(1000px) rotateY(0deg) skewY(0deg) scale(1.1) translateY(-5px)";
-              e.currentTarget.style.animationPlayState = "paused";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = "#F5F0E8";
-              e.currentTarget.style.transform = "perspective(1000px) rotateY(-30deg) skewY(5deg) scale(1) translateY(0)";
-              e.currentTarget.style.animationPlayState = "running";
-            }}
-            >
-              GRAPHIC DESIGNER
+          {/* Bottom bar */}
+          <div className="r-up" style={{ marginTop:"2.5rem", display:"flex", alignItems:"center", gap:"2.5rem", flexWrap:"wrap" }}>
+            <p style={{
+              fontFamily:"'DM Serif Display',serif",
+              fontSize:"clamp(0.9rem,1.5vw,1.1rem)",
+              fontStyle:"italic",
+              color:"var(--muted)",
+              maxWidth:"320px",
+              lineHeight:1.6,
+            }}>
+              Mewujudkan ide menjadi visual yang berbicara — 5+ tahun pengalaman.
             </p>
-            
-            <p className="hero-text-shard title-technical" style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(2rem, 5vw, 4rem)",
-              color: "rgba(196,167,125,0.8)", // Semitransparan gold
-              textTransform: "uppercase",
-              position: "absolute",
-              bottom: "0", left: "-10rem",
-              transform: "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg)", // Rotasi agresif kaku
-              transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-              animation: "float2 6s ease-in-out infinite alternate" // Melayang lambat beda arah
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = "#C4A77D";
-              e.currentTarget.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) skewX(0deg) scale(1.15) translateY(5px)";
-              e.currentTarget.style.zIndex = "20";
-              e.currentTarget.style.animationPlayState = "paused";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = "rgba(196,167,125,0.8)";
-              e.currentTarget.style.transform = "perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg) scale(1) translateY(0)";
-              e.currentTarget.style.zIndex = "10";
-              e.currentTarget.style.animationPlayState = "running";
-            }}
-            >
-              TECHNICAL ARTIST
-            </p>
+            <div style={{ display:"flex", gap:"1rem" }}>
+              <button onClick={()=>document.querySelector("#portfolio")?.scrollIntoView({behavior:"smooth"})}
+                style={{
+                  fontFamily:"'Space Mono',monospace", fontSize:"0.6rem",
+                  letterSpacing:"0.15em", textTransform:"uppercase",
+                  background:"var(--ink)", color:"var(--bg)",
+                  padding:"0.8rem 2rem", border:"none", cursor:"none",
+                  fontWeight:700, transition:"background 0.25s",
+                }}
+                onMouseEnter={e=>e.currentTarget.style.background="var(--gold)"}
+                onMouseLeave={e=>e.currentTarget.style.background="var(--ink)"}
+              >See Work</button>
+              <a href="mailto:acman2602@gmail.com" style={{
+                fontFamily:"'Space Mono',monospace", fontSize:"0.6rem",
+                letterSpacing:"0.15em", textTransform:"uppercase",
+                background:"transparent", color:"var(--ink)",
+                padding:"0.8rem 2rem",
+                border:"1px solid rgba(14,13,10,0.25)",
+                cursor:"none", textDecoration:"none",
+                transition:"border-color 0.25s",
+              }}
+              onMouseEnter={e=>e.currentTarget.style.borderColor="var(--ink)"}
+              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(14,13,10,0.25)"}
+              >Contact</a>
+            </div>
           </div>
-
         </div>
 
-        {/* --- ABOUT Block: Editorial & Subtil --- */}
-        <div style={{ position: "absolute", bottom: "4rem", left: "4rem", zIndex: 5, maxWidth: "500px" }}>
-          <p className="hero-text-shard" style={{
-            fontFamily: "'DM Serif Display',serif",
-            fontStyle: "italic",
-            fontSize: "clamp(1.5rem, 3vw, 2rem)",
-            lineHeight: 1.4,
-            color: "#C4A77D", // Gold
-            marginBottom: "1rem"
-          }}>
-            CORE PROTOCOL: VISUAL TRANSLATION.
-          </p>
-          <p className="hero-text-shard" style={{
-            fontFamily: "'Space Mono',monospace",
-            fontSize: "0.85rem",
-            lineHeight: 1.8,
-            color: "rgba(245,240,232,0.6)", // Sedikit transparansi off-white
-          }}>
-            Fusing technical rigor with creative fluency. Consistently translating complex concepts into precise technical documents and impactful visual identities. A fusion of technical rigor and creative fluency. Optimized for clarity and impact.
-          </p>
-        </div>
-        
-        {/* --- SCROLLING MARQUEE (Opacity Tipis) --- */}
-        <div style={{
-          position: "absolute",
-          top: "4rem", right: "0",
-          overflow: "hidden",
-          width: "100%",
-          display: "flex",
-          transform: "rotate(15deg) translateY(-50%)",
-          transformOrigin: "top right",
-          zIndex: 1, // Di belakang teks tapi di atas background layer
-          opacity: 0.25 // Sangat tipis
+        {/* RIGHT — photo */}
+        <div className="hero-img-wrap r-fade" style={{
+          width:"clamp(160px,18vw,280px)",
+          aspectRatio:"3/4",
+          overflow:"hidden",
+          borderRadius:"2px",
+          position:"relative",
+          flexShrink:0,
+          alignSelf:"flex-end",
         }}>
-          <div className="hero-text-shard" style={{
-            display: "flex",
-            gap: "2rem",
-            whiteSpace: "nowrap",
-            animation: "marquee 25s linear infinite" // Lambat
-          }}>
-            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.75rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
-            <p style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.75rem", color: "#F5F0E8" }}>SIGNAL-TO-NOISE RATIO OPTIMIZED... FUSING TECHNICAL RIGOR WITH CREATIVE FLUENCE...</p>
-          </div>
+          <img
+            src="https://res.cloudinary.com/dyhvx9wit/image/upload/v1773726410/Acep_aidjlb.png"
+            alt="Acep Nurjaman"
+            style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block" }}
+          />
+          {/* Gold tag */}
+          <div style={{
+            position:"absolute", bottom:"1rem", left:"1rem",
+            background:"var(--gold)", color:"#fff",
+            fontFamily:"'Space Mono',monospace", fontSize:"0.52rem",
+            letterSpacing:"0.12em", textTransform:"uppercase",
+            padding:"0.3rem 0.7rem", fontWeight:700,
+          }}>5+ Yrs</div>
         </div>
-        
       </div>
 
-      {/* --- CSS Global untuk Keyframes, Floats, dan Kelas .on --- */}
-      <style jsx global>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
+      {/* Scroll cue */}
+      <div className="r-fade" style={{
+        position:"absolute", bottom:"2.5rem", left:"50%",
+        transform:"translateX(-50%)",
+        display:"flex", flexDirection:"column", alignItems:"center", gap:"0.5rem",
+        zIndex:2,
+      }}>
+        <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.5rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"var(--muted)" }}>Scroll</span>
+        <div style={{ width:"1px", height:"36px", background:"linear-gradient(to bottom,var(--ink),transparent)", animation:"scrollDrop 2s ease infinite" }}/>
+      </div>
+
+      <style jsx>{`
+        @keyframes scrollDrop {
+          0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.5)}
         }
-        @keyframes float1 {
-          0% { transform: perspective(1000px) rotateY(-30deg) skewY(5deg) translateY(0px); }
-          100% { transform: perspective(1000px) rotateY(-25deg) skewY(3deg) translateY(-15px); }
-        }
-        @keyframes float2 {
-          0% { transform: perspective(1000px) rotateX(25deg) rotateY(15deg) skewX(-5deg) translateY(0px); }
-          100% { transform: perspective(1000px) rotateX(20deg) rotateY(10deg) skewX(-3deg) translateY(15px); }
-        }
-        .hero-text-shard {
-          opacity: 0 !important;
-          transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.5s ease;
-        }
-        .hero-text-shard.on {
-          opacity: 1 !important;
+        @media(max-width:768px){
+          .hero-inner{ grid-template-columns:1fr !important; }
+          .hero-img-wrap{ display:none !important; }
         }
       `}</style>
     </section>
