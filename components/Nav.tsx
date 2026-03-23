@@ -207,7 +207,9 @@ export default function Nav() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: "3rem",
+          /* gap kecil + paddingTop biar item pertama tidak ketutup nav */
+          gap: "1.2rem",
+          paddingTop: "5rem",
           opacity: open ? 1 : 0,
           visibility: open ? "visible" : "hidden",
           transition: "opacity 0.5s ease, visibility 0.5s",
@@ -221,8 +223,9 @@ export default function Nav() {
               background: "none",
               border: "none",
               fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: "clamp(2.5rem,8vw,5rem)",
-              letterSpacing: "0.15em",
+              /* ↓ diperkecil agar semua 5 item muat di layar */
+              fontSize: "clamp(1.8rem,6vw,3rem)",
+              letterSpacing: "0.18em",
               color: "var(--bg)",
               cursor: "none",
               transition: "color 0.3s",
@@ -235,13 +238,15 @@ export default function Nav() {
             {l.label}
           </button>
         ))}
+        {/* Gold divider */}
+        <div style={{ width: "40px", height: "1px", background: "var(--gold)", margin: "0.5rem 0", opacity: 0.4 }} />
         <a
           href="mailto:acman2602@gmail.com"
           style={{
             fontFamily: "'Space Mono',monospace",
-            fontSize: "0.75rem",
-            color: "rgba(245,240,232,0.4)",
-            letterSpacing: "0.2em",
+            fontSize: "0.62rem",
+            color: "rgba(245,240,232,0.35)",
+            letterSpacing: "0.18em",
             textDecoration: "none",
           }}
         >
