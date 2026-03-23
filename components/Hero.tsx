@@ -74,7 +74,7 @@ export default function Hero() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        padding: "80px 3rem 8vh",
+        padding: "120px 3rem 8vh",
       }}
     >
 
